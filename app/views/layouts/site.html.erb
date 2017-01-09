@@ -30,6 +30,7 @@
 
 </head>
 
+
 <body>
     <div id="global-spin" style="display: none;" class="loading">Loading&#8230;</div>
     <%= render partial: "layouts/site_shared/navigation" %>
@@ -51,9 +52,9 @@
                                 </div><!-- /input-group -->
                             </div><!-- /.col-lg-6 -->
                         </div><!-- /.row -->
-                    </div>
-                </div>
-            </div>
+                    </div><!-- /.well well-sm -->
+                </div><!-- /.col-md-3 -->
+            </div><!-- /.row -->
         <% end %>
 
         <div class="row">
@@ -66,13 +67,11 @@
                     <%= render partial: 'layouts/site_shared/carousel' %>
                 <% end %>
 
-                    <%= yield %>
+                <%= yield %>
 
-            </div>
-
-        </div>
-
-    </div>
+            </div><!-- /.col-md-9 -->
+        </div><!-- /.row -->
+    </div><!-- /.container -->
 
     <%= render partial: "layouts/site_shared/footer" %>
 
