@@ -1,0 +1,86 @@
+<div class="row">
+
+    <% if @ads.blank? %>
+        <div class="well">
+            <h4>Nenhum anúncio encontrado com <b><%= params[:q] %></b></h4>
+        </div>
+    <% end %>
+
+    <% if @ads.kind_of?(ActiveRecord::Relation) %>
+
+        <% @ads.each do |ad| %>
+            <div class="col-sm-4 col-lg-4 col-md-4">
+                <div class="thumbnail">
+                    <!-- PICTURE -->
+                    <%= link_to (image_tag ad.picture.url(:medium)), site_ad_detail_path(ad), remote: true, data: { push: :partial } %>
+                    <!-- /PICTURE -->
+                    <div class="caption">
+                        <!-- PRICE -->
+                        <h4 class="pull-right"><%= humanized_money_with_symbol ad.price %></h4>
+                        <!-- / PRICE -->
+
+                        <!-- TITLE -->
+                        <h4>
+                            <%= link_to truncate(ad.title, length: 18), site_ad_detail_path(ad), remote: true, data: { push: :partial } %>
+                        </h4>
+                        <!-- / TITLE -->
+
+                        <!-- DESCRIPTION -->
+                        <p><%= truncate(ad.description_short, length: 100) %></p>
+                        <!-- / DESCRIPTION -->
+                    </div>
+                    <div class="ratings">
+                        <p class="pull-right">15 reviews</p>
+                        <p>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    <% else %>
+        <div class="col-sm-4 col-lg-4 col-md-4">
+            <div class="thumbnail">
+                <!-- PICTURE -->
+                <%= link_to (image_tag ad.picture.url(:medium)), site_ad_detail_path(ad), remote: true, data: { push: :partial } %>
+                <!-- /PICTURE -->
+                <div class="caption">
+                    <!-- PRICE -->
+                    <h4 class="pull-right"><%= humanized_money_with_symbol ad.price %></h4>
+                    <!-- / PRICE -->
+
+                    <!-- TITLE -->
+                    <h4>
+                        <%= link_to truncate(ad.title, length: 18), site_ad_detail_path(ad), remote: true, data: { push: :partial } %>
+                    </h4>
+                    <!-- / TITLE -->
+
+                    <!-- DESCRIPTION -->
+                    <p><%= truncate(ad.description_short, length: 100) %></p>
+                    <!-- / DESCRIPTION -->
+                </div>
+                <div class="ratings">
+                    <p class="pull-right">15 reviews</p>
+                    <p>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                        <span class="glyphicon glyphicon-star"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    <% end %>
+
+    <div class="row">
+        <div class="text-center">
+            <%= paginate @ads %>
+        </div>
+    </div>
+
+</div>

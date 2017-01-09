@@ -1,0 +1,9 @@
+<script>
+  $(document).on("input", "#description_short", function () {
+    var limite = 100;
+    var caracteresDigitados = $(this).val().length;
+    var caracteresRestantes = limite - caracteresDigitados;
+
+    $(".description_short").text(caracteresRestantes);
+  });
+</script>
