@@ -16,6 +16,7 @@ namespace :dev do
     puts %x(rails dev:generate_member_default)
     puts %x(rails dev:generate_members)
     puts %x(rails dev:generate_ads)
+    puts %x(rails dev:generate_comments)
 
     puts "Setup executado com sucesso!"
   end
@@ -102,6 +103,22 @@ namespace :dev do
     end
 
     puts "Cadastrar ANÚNCIOS FAKES... [OK]"
+  end
+
+  desc "Cria Comentários Fakes"
+  task generate_comments: :environment do
+    puts "Cadastrar COMENTÁRIOS FAKES..."
+
+    Ad.all.each do |ad|
+      Random.rand(1..3).times do
+        Comment.create!(
+          body: Faker::Lorem.paragraph([1,2,3].sample),
+          member: Member.all.sample,
+          ad: ad)
+      end
+    end
+
+    puts "Cadastrar COMENTÁRIOS FAKES... [OK]"
   end
 
   def markdown_fake
