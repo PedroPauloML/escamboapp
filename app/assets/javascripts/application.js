@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap.growl
-// require turbolinks # REMOVED
 
 
 /* SPIN */

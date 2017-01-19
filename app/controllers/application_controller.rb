@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
 
+  before_filter :store_current_location, :unless => :devise_controller?
+
   # Pundit
   include Pundit
 
@@ -24,5 +26,13 @@ class ApplicationController < ActionController::Base
   def user_not_authorized
     flash[:alert] = "Você não está autorizado para executar essa ação."
     redirect_to(request.referrer || root_path)
+  end
+
+  private
+  # override the devise helper to store the current location so we can
+  # redirect to it after loggin in or out. This override makes signing in
+  # and signing up work automatically.
+  def store_current_location
+    store_location_for(:member, request.url)
   end
 end

@@ -1,6 +1,8 @@
 <div class="thumbnail">
+
     <%= image_tag @ad.picture.url(:big), class: "img-responsive",
         id: "myImg", alt: "#{@ad.title}" %>
+
     <div class="caption-full">
         <h4 class="pull-right">
             <%= humanized_money_with_symbol @ad.price %>
@@ -8,27 +10,141 @@
         <h4><%= @ad.title %></h4>
         <p><%= @ad.description.html_safe %></p>
     </div>
+
     <div class="ratings">
-        <p class="pull-right">3 reviews</p>
-        <p>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star-empty"></span>
-            4.0 stars
-        </p>
+        <div class="text-right">
+            <p>
+                <% if member_signed_in? %>
+                    Sua avaliação:
+                    <%= rating_for_user @ad, current_member, 'quality', disable_after_rate: false %>
+                <% end %>
+            </p>
+        </div>
     </div>
+
 </div>
 
 <div class="well">
+    <div class="row">
+        <div class="col-md-1" style="margin: 10px 0">
+            <h2 style="margin-top: 0">
+                <% if @ad.rates('quality').exists? %>
+                    <%= @ad.average('quality').avg %>
+                <% else %>
+                    0
+                <% end %>
+                </h2>
+            <p style="margin-bottom: 0">média</p>
+        </div>
 
-    <div class="text-right">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-success" data-toggle="modal"
-        data-target="#commentModal">
-            Deixe um comentário
-        </button>
+        <div class="col-md-4" style="margin-bottom: 10px">
+            <svg height="87" version="1.1" width="250" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="overflow: hidden; position: relative;">
+
+                <!-- 1 star -->
+                <text x="8" y="80" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">1</tspan>
+                </text>
+                <!-- / 1 star -->
+
+                <!-- 2 star -->
+                <text x="8" y="62" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">2</tspan>
+                </text>
+                <!-- / 2 star -->
+
+                <!-- 3 star -->
+                <text x="8" y="44" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">3</tspan>
+                </text>
+                <!-- / 3 star -->
+
+                <!-- 4 star -->
+                <text x="8" y="26" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">4</tspan>
+                </text>
+                <!-- / 4 star -->
+
+                <!-- 5 star -->
+                <text x="8" y="8" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">5</tspan>
+                </text>
+                <!-- / 5 star -->
+
+                <!-- 5 bar -->
+                <rect x="23" y="0" width=<%= percentage_average(@ad.stars_of_comment.average_stars5) %> height="15" rx="0" ry="0" fill="green" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
+                <!-- / 5 bar -->
+
+                <!-- 4 bar -->
+                <rect x="23" y="18" width=<%= percentage_average(@ad.stars_of_comment.average_stars4) %> height="15" rx="0" ry="0" fill="lightgreen" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
+                <!-- / 4 bar -->
+
+                <!-- 3 bar -->
+                <rect x="23" y="36" width=<%= percentage_average(@ad.stars_of_comment.average_stars3) %> height="15" rx="0" ry="0" fill="yellow" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
+                <!-- / 3 bar -->
+
+                <!-- 2 bar -->
+                <rect x="23" y="54" width=<%= percentage_average(@ad.stars_of_comment.average_stars2) %> height="15" rx="0" ry="0" fill="orange" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
+                <!-- / 2 bar -->
+
+                <!-- 1 bar -->
+                <rect x="23" y="72" width=<%= percentage_average(@ad.stars_of_comment.average_stars1) %> height="15" rx="0" ry="0" fill="red" stroke="none" fill-opacity="1" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); fill-opacity: 1;"></rect>
+                <!-- / 1 bar -->
+
+                <!-- 1 star average -->
+                <text x="235" y="80" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><%= format("%.1f", @ad.stars_of_comment.average_stars1) %></tspan>
+                </text>
+                <!-- / 1 star average -->
+
+                <!-- 2 star average -->
+                <text x="235" y="62" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><%= format("%.1f", @ad.stars_of_comment.average_stars2) %></tspan>
+                </text>
+                <!-- / 2 star average -->
+
+
+                <!-- 3 star average -->
+                <text x="235" y="44" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><%= format("%.1f", @ad.stars_of_comment.average_stars3) %></tspan>
+                </text>
+                <!-- / 3 star average -->
+
+
+                <!-- 4 star average -->
+                <text x="235" y="26" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><%= format("%.1f", @ad.stars_of_comment.average_stars4) %></tspan>
+                </text>
+                <!-- / 4 star average -->
+
+
+                <!-- 5 star average -->
+                <text x="235" y="8" text-anchor="end" font-family="sans-serif" font-size="12px" stroke="none" fill="#888888" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); text-anchor: end; font-family: sans-serif; font-size: 12px; font-weight: normal;" font-weight="normal">
+                    <tspan dy="4" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"><%= format("%.1f", @ad.stars_of_comment.average_stars5) %></tspan>
+                </text>
+                <!-- / 5 star average -->
+            </svg>
+        </div>
+
+        <div class="col-md-7">
+            <div class="text-right">
+                <% if member_signed_in? %>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success" data-toggle="modal"
+                    data-target="#commentModal">
+                        Deixe um comentário
+                    </button>
+                <% else %>
+                    <!-- Redirect to login -->
+                    <%= link_to "Deixe seu comentário", new_member_session_path,
+                        class: "btn btn-success",
+                        data: { toggle: "tooltip", placement: "bottom",
+                                'original-title': "Entre com uma conta para comentar"
+                              } %>
+                <% end %>
+                <br><br>
+                <p><%= @ad.comments.size %> comentários</p>
+            </div>
+        </div>
     </div>
 
     <hr>
@@ -39,3 +155,9 @@
 
 <%= render partial: "site/ad_detail/shared/commentModal" %>
 <%= render partial: "site/ad_detail/shared/imageModal" %>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>

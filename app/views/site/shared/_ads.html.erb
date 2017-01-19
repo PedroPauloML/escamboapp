@@ -30,13 +30,9 @@
                         <!-- / DESCRIPTION -->
                     </div>
                     <div class="ratings">
-                        <p class="pull-right">15 reviews</p>
+                        <p class="pull-right"><%= ad.comments.size %> comentários</p>
                         <p>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
+                            <%= rating_for ad, 'quality', { readonly: true } %>
                         </p>
                     </div>
                 </div>

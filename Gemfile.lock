@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/wazery/ratyrate.git
+  revision: b738c56a4b53260d4083bbbc7895d7d32f3c0264
+  specs:
+    ratyrate (1.2.2.alpha)
+
 GEM
   remote: https://rubygems.org/
   remote: https://rails-assets.org/
@@ -299,6 +305,7 @@ DEPENDENCIES
   rails-assets-marked!
   rails-erd
   rails-i18n
+  ratyrate!
   redcarpet
   sass-rails (~> 5.0)
   spring

@@ -1,4 +1,8 @@
 class Ad < ApplicationRecord
+
+  # Ratyrate
+  ratyrate_rateable 'quality'
+
   # Callback
   before_save :md_to_html
 
@@ -6,6 +10,7 @@ class Ad < ApplicationRecord
   belongs_to :member
   belongs_to :category, counter_cache: true
   has_many :comments
+  has_one :stars_of_comment
 
   # Validates
   validates :title, :description_md, :category, :finish_date, :picture, presence: true
@@ -20,7 +25,7 @@ class Ad < ApplicationRecord
         }
 
   scope :to_the, ->(member) { where(member: member) }
-  scope :by_category, ->(id) { where(category_id: id) }
+  scope :by_category, ->(id, page) { where(category_id: id).page(page).per(6) }
 
   # gem papeclip
   has_attached_file :picture, styles: { big: "800x300#", medium: "320x150#",

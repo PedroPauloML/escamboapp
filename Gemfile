@@ -16,6 +16,8 @@ source 'https://rails-assets.org' do
   gem 'rails-assets-animate-css', source: 'https://rails-assets.org'
 end
 
+# Ratyrate
+gem 'ratyrate', github: 'wazery/ratyrate'
 # Kaminari
 gem 'kaminari'
 # Kaminari i18n

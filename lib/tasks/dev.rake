@@ -16,10 +16,12 @@ namespace :dev do
     puts %x(rails dev:generate_member_default)
     puts %x(rails dev:generate_members)
     puts %x(rails dev:generate_ads)
-    puts %x(rails dev:generate_comments)
+    puts %x(rails dev:generate_comments_and_avaliations)
+    puts %x(rails dev:orgazine_stars)
 
     puts "Setup executado com sucesso!"
   end
+############################################################
 
   desc "Cria Administradores Fakes"
   task generate_admins: :environment do
@@ -37,6 +39,7 @@ namespace :dev do
 
     puts "Cadastrar ADMINISTRADORES FAKES... [OK]"
   end
+############################################################
 
   desc "Cria o membro padrão"
   task generate_member_default: :environment do
@@ -50,6 +53,7 @@ namespace :dev do
 
     puts "Cadastrar MEMBRO PADRÃO... [OK]"
   end
+############################################################
 
   desc "Cria Membros Fakes"
   task generate_members: :environment do
@@ -65,6 +69,7 @@ namespace :dev do
 
     puts "Cadastrar MEMBROS FAKES... [OK]"
   end
+############################################################
 
   desc "Cria Anúncios Fakes"
   task generate_ads: :environment do
@@ -104,24 +109,88 @@ namespace :dev do
 
     puts "Cadastrar ANÚNCIOS FAKES... [OK]"
   end
+############################################################
 
-  desc "Cria Comentários Fakes"
-  task generate_comments: :environment do
-    puts "Cadastrar COMENTÁRIOS FAKES..."
+  desc "Cria Comentários e Avaliações Fakes"
+  task generate_comments_and_avaliations: :environment do
+    puts "Cadastrar COMENTÁRIOS e AVALIAÇÕES FAKES..."
 
     Ad.all.each do |ad|
       Random.rand(1..3).times do
         Comment.create!(
           body: Faker::Lorem.paragraph([1,2,3].sample),
           member: Member.all.sample,
-          ad: ad)
+          ad: ad
+          )
+      end
+
+      Random.rand(1..3).times do
+        obj = "Ad".classify.constantize.find(ad.id)
+        obj.rate(Random.rand(1..5).to_f, Member.all.sample, 'quality')
       end
     end
 
-    puts "Cadastrar COMENTÁRIOS FAKES... [OK]"
+    puts "Cadastrar COMENTÁRIOS e AVALIAÇÕES FAKES... [OK]"
   end
+############################################################
+
+  desc "Organiza em campos separados a quantidade de estrelas pelo seu valor"
+  task orgazine_stars: :environment do
+    puts "Organizando as ESTRELAS/AVALIAÇÕES..."
+
+    Ad.all.each do |ad|
+
+      if ad.rates('quality').exists?
+
+        stars = StarsOfComment.new
+        rates = Rate.where(rateable_id: ad.id)
+
+        rates.all.each do |rate|
+          stars.increment(:stars5, by = 1) if rate.stars == 5
+          stars.increment(:stars4, by = 1) if rate.stars == 4
+          stars.increment(:stars3, by = 1) if rate.stars == 3
+          stars.increment(:stars2, by = 1) if rate.stars == 2
+          stars.increment(:stars1, by = 1) if rate.stars == 1
+          stars.increment(:totalStars, by = rate.stars)
+          stars.ad_id = ad.id
+        end
+
+        stars.save
+
+        stars.average_stars5 = StarsOfComment.where(id: StarsOfComment.last).sum("((stars5*5)*100) / totalStars")
+        stars.average_stars4 = StarsOfComment.where(id: StarsOfComment.last).sum("((stars4*4)*100) / totalStars")
+        stars.average_stars3 = StarsOfComment.where(id: StarsOfComment.last).sum("((stars3*3)*100) / totalStars")
+        stars.average_stars2 = StarsOfComment.where(id: StarsOfComment.last).sum("((stars2*2)*100) / totalStars")
+        stars.average_stars1 = StarsOfComment.where(id: StarsOfComment.last).sum("(stars1*100) / totalStars")
+
+        stars.save
+
+      end
+    end
+
+    puts "Organizando as ESTRELAS/AVALIAÇÕES... [OK]"
+  end
+############################################################
 
   def markdown_fake
     %x(ruby -e "require 'doctor_ipsum'; puts DoctorIpsum::Markdown.entry")
   end
 end
+
+# stars5 = 0
+# stars4 = 0
+# stars3 = 0
+# stars2 = 0
+# stars1 = 0
+# Rate.all.each do |rate|
+#   stars5 = stars5 + rate.stars if rate.stars == 5
+#   stars4 = stars4 + rate.stars if rate.stars == 4
+#   stars3 = stars3 + rate.stars if rate.stars == 3
+#   stars2 = stars2 + rate.stars if rate.stars == 2
+#   stars1 = stars1 + rate.stars if rate.stars == 1
+# end
+# stars5 = stars5 / 5
+# stars4 = stars4 / 4
+# stars3 = stars3 / 3
+# stars2 = stars2 / 2
+# stars1 = stars1 / 1
